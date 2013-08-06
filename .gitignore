@@ -1,0 +1,8 @@
+bin/
+test-results
+*.suo
+obj/
+*.userprefs
+.DS_Store
+*.user
+*.DotSettings
