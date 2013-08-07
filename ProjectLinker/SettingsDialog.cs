@@ -11,22 +11,30 @@ namespace ProjectLinker
 	public partial class SettingsDialog : Dialog
 	{
 		private readonly Action<string, List<string>> onSettingsSave;
+		private readonly string savedSourceProjectName;
+		private readonly List<string> savedTargetProjectNames;
 
-		public SettingsDialog (Action<string, List<string>> onSettingsSave)
+		public SettingsDialog (Action<string, List<string>> onSettingsSave, string savedSourceProjectName, List<string> savedTargetProjectNames)
 		{
 			this.onSettingsSave = onSettingsSave;
+			this.savedSourceProjectName = savedSourceProjectName;
+			this.savedTargetProjectNames = savedTargetProjectNames;
 			Build ();
-			FillSourceProjectCombo();
 			FillTargetProjects();
+			FillSourceProjectCombo();
 		}
 
 		private void FillTargetProjects()
 		{
-			ReadOnlyCollection<Project> projects = IdeApp.Workspace.GetAllProjects();
+			var projects = (from p in IdeApp.Workspace.GetAllProjects() select p.Name).ToList();
 			
 			foreach (var project in projects) {
-				CheckButton checkButton = new CheckButton(project.Name);
+				CheckButton checkButton = new CheckButton(project);
 				targetProjectsBox.PackStart(checkButton, false, false, 0);
+
+				if (savedTargetProjectNames.Contains(project)) {
+					checkButton.Active = true;
+				}
 			}
 
 			targetProjectsBox.ShowAll();
@@ -34,14 +42,22 @@ namespace ProjectLinker
 
 		private void FillSourceProjectCombo()
 		{
-			ReadOnlyCollection<Project> projects = IdeApp.Workspace.GetAllProjects();
+			var projects = (from p in IdeApp.Workspace.GetAllProjects() select p.Name).ToList();
 			projectsCombo.AppendText("Do not link any projects");
 
 			foreach (var project in projects) {
-				projectsCombo.AppendText(project.Name);
+				projectsCombo.AppendText(project);
 			}
 
-			projectsCombo.Active = 0;
+			if (savedSourceProjectName == null) {
+				projectsCombo.Active = 0;
+			}
+			else {
+				int index = projects.IndexOf(savedSourceProjectName) + 1;
+				TreeIter iter;
+				projectsCombo.Model.IterNthChild(out iter, index);
+				projectsCombo.SetActiveIter(iter);
+			}
 		}
 
 		protected void cancelButtonClicked (object sender, EventArgs e)
