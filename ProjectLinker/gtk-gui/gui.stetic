@@ -9,11 +9,12 @@
     <widget-library name="../../../../Program Files (x86)/Xamarin Studio/bin/MonoDevelop.Ide.dll" />
     <widget-library name="../bin/Debug/ProjectLinker.dll" internal="true" />
   </import>
-  <widget class="Gtk.Dialog" id="ProjectLinker.SettingsDialog" design-size="400 160">
+  <widget class="Gtk.Dialog" id="ProjectLinker.SettingsDialog" design-size="400 252">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Project linker options</property>
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Modal">True</property>
+    <property name="AllowShrink">True</property>
     <property name="DestroyWithParent">True</property>
     <property name="Gravity">Center</property>
     <property name="Buttons">2</property>
@@ -23,72 +24,84 @@
         <property name="MemberName" />
         <property name="BorderWidth">2</property>
         <child>
-          <widget class="Gtk.Frame" id="frame">
+          <widget class="Gtk.VBox" id="vbox2">
             <property name="MemberName" />
-            <property name="ShadowType">None</property>
+            <property name="Spacing">6</property>
             <child>
-              <widget class="Gtk.Alignment" id="GtkAlignment2">
+              <widget class="Gtk.Label" id="label1">
                 <property name="MemberName" />
                 <property name="Xalign">0</property>
                 <property name="Yalign">0</property>
-                <property name="LeftPadding">12</property>
-                <child>
-                  <widget class="Gtk.VBox" id="vbox2">
-                    <property name="MemberName" />
-                    <property name="Spacing">6</property>
-                    <child>
-                      <widget class="Gtk.ComboBox" id="projectsCombo">
-                        <property name="MemberName" />
-                        <property name="Tooltip">Select the project that will be used as source for the other projects.</property>
-                        <property name="CanFocus">True</property>
-                        <property name="IsTextCombo">True</property>
-                        <property name="Items" />
-                      </widget>
-                      <packing>
-                        <property name="Position">0</property>
-                        <property name="AutoSize">True</property>
-                        <property name="Expand">False</property>
-                        <property name="Fill">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="Gtk.CheckButton" id="linkAllItems">
-                        <property name="MemberName" />
-                        <property name="CanFocus">True</property>
-                        <property name="Label" translatable="yes">Link all items by default</property>
-                        <property name="Active">True</property>
-                        <property name="DrawIndicator">True</property>
-                        <property name="HasLabel">True</property>
-                        <property name="UseUnderline">True</property>
-                      </widget>
-                      <packing>
-                        <property name="Position">1</property>
-                        <property name="AutoSize">True</property>
-                        <property name="Expand">False</property>
-                        <property name="Fill">False</property>
-                      </packing>
-                    </child>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="Gtk.Label" id="GtkLabel2">
-                <property name="MemberName" />
-                <property name="LabelProp" translatable="yes">&lt;b&gt;Select the source project&lt;/b&gt;</property>
+                <property name="LabelProp" translatable="yes">&lt;b&gt;Source project&lt;/b&gt;</property>
                 <property name="UseMarkup">True</property>
                 <property name="SingleLineMode">True</property>
               </widget>
               <packing>
-                <property name="type">label_item</property>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Alignment" id="alignment1">
+                <property name="MemberName" />
+                <property name="LeftPadding">20</property>
+                <child>
+                  <widget class="Gtk.ComboBox" id="projectsCombo">
+                    <property name="MemberName" />
+                    <property name="IsTextCombo">True</property>
+                    <property name="Items" translatable="yes" />
+                    <signal name="Changed" handler="sourceProjectChanged" />
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Label" id="label2">
+                <property name="MemberName" />
+                <property name="Xalign">0</property>
+                <property name="Yalign">0</property>
+                <property name="LabelProp" translatable="yes">&lt;b&gt;Target projects&lt;/b&gt;</property>
+                <property name="UseMarkup">True</property>
+              </widget>
+              <packing>
+                <property name="Position">2</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Alignment" id="alignment2">
+                <property name="MemberName" />
+                <property name="Yalign">0</property>
+                <property name="LeftPadding">20</property>
+                <child>
+                  <widget class="Gtk.VBox" id="targetProjectsBox">
+                    <property name="MemberName" />
+                    <property name="Spacing">6</property>
+                    <child>
+                      <placeholder />
+                    </child>
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">3</property>
+                <property name="AutoSize">True</property>
               </packing>
             </child>
           </widget>
           <packing>
             <property name="Position">0</property>
             <property name="AutoSize">True</property>
-            <property name="Expand">False</property>
-            <property name="Fill">False</property>
           </packing>
         </child>
       </widget>

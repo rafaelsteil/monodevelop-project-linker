@@ -1,9 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using MonoDevelop.Components.Commands;
 using MonoDevelop.Core;
-using MonoDevelop.Ide;
 using MonoDevelop.Projects;
 
 namespace ProjectLinker
@@ -15,9 +13,7 @@ namespace ProjectLinker
 
 		protected override void Run()
 		{
-			SettingsDialog dialog = new SettingsDialog ();
-			//new Dialog ();
-			//dialog.Show ();
+			new SettingsDialog ();
 
 			/*
 			ReadOnlyCollection<Project> projects = IdeApp.Workspace.GetAllProjects();
