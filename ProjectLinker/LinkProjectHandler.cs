@@ -15,6 +15,11 @@ namespace ProjectLinker
 
 		protected override void Run()
 		{
+			SettingsDialog dialog = new SettingsDialog ();
+			//new Dialog ();
+			//dialog.Show ();
+
+			/*
 			ReadOnlyCollection<Project> projects = IdeApp.Workspace.GetAllProjects();
 
 			if (projects.Count < 2) {
@@ -27,6 +32,7 @@ namespace ProjectLinker
 			sourceProject.FileAddedToProject += (sender, args) => ExecuteFileChangedAction(args, FileChangedActionType.Added);
 			sourceProject.FileRemovedFromProject += (sender, args) => ExecuteFileChangedAction(args, FileChangedActionType.Removed);
 			sourceProject.FileRenamedInProject += (sender, args) => ExecuteFileChangedAction(args, FileChangedActionType.Renamed);
+			 * */
 		}
 
 		private void ExecuteFileChangedAction<T>(EventArgsChain<T> args, FileChangedActionType actionType) where T : ProjectFileEventInfo
@@ -89,7 +95,7 @@ namespace ProjectLinker
 		}
 
 		protected override void Update(CommandInfo info) {
-			info.Enabled = IdeApp.ProjectOperations.CurrentSelectedProject != null;
+			//info.Enabled = IdeApp.ProjectOperations.CurrentSelectedProject != null;
 		}
 	}
 }

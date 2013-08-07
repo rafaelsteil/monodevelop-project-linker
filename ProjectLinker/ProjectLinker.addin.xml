@@ -3,7 +3,7 @@
 	id="ProjectLinker"
 	name="Project linker"
 	author="Rafael Steil"
-	copyright="MIT"
+	copyright="LGPL"
 	url="http://rafaelsteil.com"
 	description="Automatically link files from one project onto another"
 	category="Project Extensions"
@@ -19,7 +19,7 @@
 	</Dependencies>
 
 	<Extension path="/MonoDevelop/Ide/Commands">
-		<Command id="ProjectLinker.LinkProject" _label="Link projects" _description="Set this project as source for linking with other projects" defaultHandler="ProjectLinker.LinkProjectHandler"/>
+		<Command id="ProjectLinker.LinkProject" _label="Configure project link..." _description="Set this project as source for linking with other projects" defaultHandler="ProjectLinker.LinkProjectHandler"/>
 	</Extension>
 
 	<Extension path="/MonoDevelop/Ide/MainMenu/Project">
