@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Xml;
 using System.Linq;
+using System.Xml.Linq;
+using GLib;
 using MonoDevelop.Components.Commands;
 using MonoDevelop.Core;
 using MonoDevelop.Ide;
@@ -60,6 +64,7 @@ namespace ProjectLinker
 			if (sourceProjectName == null || targetProjectsNames.Count == 0) {
 				ResetFileEvents();
 				sourceProject = null;
+				SaveUserPreferences();
 				return;
 			}
 
@@ -67,6 +72,26 @@ namespace ProjectLinker
 			sourceProject = allProjects.First(p => p.Name == sourceProjectName);
 			InitializeFileEvents();
 			targetProjects = (from p in allProjects where targetProjectsNames.Contains(p.Name) select p).ToList();
+			SaveUserPreferences();
+		}
+
+		private void SaveUserPreferences()
+		{
+			Solution solution = IdeApp.Workspace.GetAllSolutions().First();
+			string settingsPath = Path.Combine(solution.BaseDirectory, solution.Name + ".userprefs");
+			XDocument doc = File.Exists(settingsPath) ? XDocument.Load(settingsPath) : XDocument.Parse("<Properties></Properties>");
+			
+			string tagName = "MonoDevelop.Addins.ProjectLinker";
+			doc.Root.Descendants(tagName).Remove();
+
+			if (sourceProject != null) {
+				XElement prefsElement = new XElement(tagName,
+					new XElement("sourceProject", sourceProject.Name),
+					new XElement("targetProjects", (from t in targetProjects select new XElement("name", t.Name)).ToList()));
+				doc.Root.Add(prefsElement);
+			}
+
+			File.WriteAllText(settingsPath, doc.ToString(), Encoding.UTF8);
 		}
 
 		private void ExecuteFileChangedAction<T>(EventArgsChain<T> args, FileChangedActionType actionType) where T : ProjectFileEventInfo
