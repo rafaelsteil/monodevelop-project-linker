@@ -1,5 +1,5 @@
-Project Linker for MonoDevelop / Xamarin Studio
-==========================
+## Project Linker for MonoDevelop / Xamarin Studio
+
 
 This addin was developed in order to automatically create and maintain links from a source project to a set of target projects, in order to make code sharing between different plataforms a more friendly task. It is based on the [Visual Studio Project Linker](http://visualstudiogallery.msdn.microsoft.com/273dbf44-55a1-4ac6-a1f3-0b9741587b9a) extension. 
 
