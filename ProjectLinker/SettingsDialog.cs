@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Gtk;
 using MonoDevelop.Ide;
@@ -8,8 +10,11 @@ namespace ProjectLinker
 {
 	public partial class SettingsDialog : Dialog
 	{
-		public SettingsDialog ()
+		private readonly Action<string, List<string>> onSettingsSave;
+
+		public SettingsDialog (Action<string, List<string>> onSettingsSave)
 		{
+			this.onSettingsSave = onSettingsSave;
 			Build ();
 			FillSourceProjectCombo();
 			FillTargetProjects();
@@ -46,6 +51,13 @@ namespace ProjectLinker
 
 		protected void saveButtonClicked (object sender, EventArgs e)
 		{
+			string sourceProject = projectsCombo.Active == 0 ? null : projectsCombo.ActiveText;
+			List<string> targetProjects = (from widget in targetProjectsBox.Children
+								  let check = (widget as CheckButton)
+								  where check != null && check.Active
+								  select check.Label).ToList();
+
+			onSettingsSave(sourceProject, targetProjects);
 			Destroy();
 		}
 
