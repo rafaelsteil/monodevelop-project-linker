@@ -23,6 +23,7 @@
 	</Extension>
 
 	<Extension path="/MonoDevelop/Ide/MainMenu/Project">
+		<SeparatorItem/>
 		<CommandItem id="ProjectLinker.LinkProject"  />
 	</Extension>
 </Addin>

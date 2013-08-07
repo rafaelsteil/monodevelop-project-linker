@@ -71,6 +71,7 @@
   <ItemGroup>
     <EmbeddedResource Include="ProjectLinker.addin.xml">
       <LogicalName>ProjectLinker.addin.xml</LogicalName>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="gtk-gui\gui.stetic">
       <LogicalName>gui.stetic</LogicalName>
