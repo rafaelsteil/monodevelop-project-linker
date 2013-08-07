@@ -62,11 +62,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LinkProjectHandler.cs" />
+    <Compile Include="FileChangedActionType.cs" />
+    <Compile Include="LinkProjectSettingsHandler.cs" />
+    <Compile Include="ProjectLinkerManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="gtk-gui\generated.cs" />
     <Compile Include="SettingsDialog.cs" />
     <Compile Include="gtk-gui\ProjectLinker.SettingsDialog.cs" />
+    <Compile Include="StartupHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ProjectLinker.addin.xml">

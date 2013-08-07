@@ -1,47 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.Xml.XPath;
 using System.Linq;
-using System.Xml.Linq;
-using MonoDevelop.Components.Commands;
 using MonoDevelop.Core;
 using MonoDevelop.Ide;
 using MonoDevelop.Projects;
 
 namespace ProjectLinker
 {
-	public class LinkProjectHandler : CommandHandler
+	public class ProjectLinkerManager
 	{
-		enum FileChangedActionType { Added, Removed, Renamed }
+		public static readonly ProjectLinkerManager Manager = new ProjectLinkerManager();
+
 		private ProjectFileEventHandler fileAddedToProject;
 		private ProjectFileEventHandler fileRemovedFromProject;
 		private ProjectFileRenamedEventHandler fileRenamedInProject;
 		private Project sourceProject;
 		private List<Project> targetProjects;
-		public static int a;
 
-		static LinkProjectHandler()
-		{
-			a = 0;
+		public void SolutionLoaded() {
+			InitProjectLinkSettings(SavedSourceProjectName, SavedTargetProjectNames);
 		}
 
-		public LinkProjectHandler()
-		{
+		public void SolutionUnloaded() {
+			ResetFileEvents();
 			sourceProject = null;
 		}
 
-		protected override void Run()
-		{
-			string sourceProjectName;
-			List<string> targetProjectNames;
-			LoadUserPreferences(out sourceProjectName, out targetProjectNames);
-			new SettingsDialog (OnSettingsSave, sourceProjectName, targetProjectNames);
+		public List<string> SavedTargetProjectNames {
+			get { return PropertyService.Get<List<string>>(UserPreferencesTargetProjects); }
 		}
 
-		private void ResetFileEvents()
-		{
+		public string SavedSourceProjectName {
+			get { return PropertyService.Get<string>(UserPreferencesSourceProject); }
+		}
+
+		public void OnSettingsSave(string sourceProjectName, List<string> targetProjectsNames) {
+			if (sourceProjectName == null || targetProjectsNames.Count == 0) {
+				ResetFileEvents();
+				sourceProject = null;
+				SaveUserPreferences();
+				return;
+			}
+
+			InitProjectLinkSettings(sourceProjectName, targetProjectsNames);
+			SaveUserPreferences();
+		}
+
+		private void ResetFileEvents() {
 			if (sourceProject == null) {
 				return;
 			}
@@ -59,64 +65,55 @@ namespace ProjectLinker
 			}
 		}
 
-		private void InitializeFileEvents()
-		{
+		private void InitializeFileEvents() {
 			ResetFileEvents();
 
-			fileAddedToProject = (sender, args) => ExecuteFileChangedAction(args, FileChangedActionType.Added);
-			fileRemovedFromProject = (sender, args) => ExecuteFileChangedAction(args, FileChangedActionType.Removed);
-			fileRenamedInProject = (sender, args) => ExecuteFileChangedAction(args, FileChangedActionType.Renamed);
+			if (sourceProject != null) {
+				fileAddedToProject = (sender, args) => ExecuteFileChangedAction(args, FileChangedActionType.Added);
+				fileRemovedFromProject = (sender, args) => ExecuteFileChangedAction(args, FileChangedActionType.Removed);
+				fileRenamedInProject = (sender, args) => ExecuteFileChangedAction(args, FileChangedActionType.Renamed);
 
-			sourceProject.FileAddedToProject += fileAddedToProject;
-			sourceProject.FileRemovedFromProject += fileRemovedFromProject;
-			sourceProject.FileRenamedInProject += fileRenamedInProject;
+				sourceProject.FileAddedToProject += fileAddedToProject;
+				sourceProject.FileRemovedFromProject += fileRemovedFromProject;
+				sourceProject.FileRenamedInProject += fileRenamedInProject;
+			}
 		}
 
-		private void OnSettingsSave(string sourceProjectName, List<string> targetProjectsNames)
+		private void InitProjectLinkSettings(string sourceProjectName, List<string> targetProjectsNames)
 		{
-			if (sourceProjectName == null || targetProjectsNames.Count == 0) {
-				ResetFileEvents();
-				sourceProject = null;
-				SaveUserPreferences();
-				return;
-			}
-
 			var allProjects = IdeApp.Workspace.GetAllProjects();
 			sourceProject = allProjects.First(p => p.Name == sourceProjectName);
 			InitializeFileEvents();
 			targetProjects = (from p in allProjects where targetProjectsNames.Contains(p.Name) select p).ToList();
-			SaveUserPreferences();
 		}
 
-		private void SaveUserPreferences()
+		private string SolutioName
 		{
+			get { return IdeApp.Workspace.GetAllSolutions().First().Name; }
+		}
+
+		private void SaveUserPreferences() {
 			PropertyService.Set(UserPreferencesSourceProject, sourceProject != null ? sourceProject.Name : "");
-			PropertyService.Set(UserPreferencesTargetProjects, sourceProject != null ? (from t in targetProjects select t.Name).ToList() :null);
+			PropertyService.Set(UserPreferencesTargetProjects, sourceProject != null ? (from t in targetProjects select t.Name).ToList() : null);
 		}
 
-		private string UserPreferencesTargetProjects
-		{
+		private string UserPreferencesTargetProjects {
 			get { return String.Format("{0}.TargetProjects", UserPreferencesRoot); }
 		}
 
-		private string UserPreferencesSourceProject
-		{
+		private string UserPreferencesSourceProject {
 			get { return String.Format("{0}.SourceProject", UserPreferencesRoot); }
 		}
 
-		private static string UserPreferencesRoot
-		{
-			get { return "MonoDevelop.Addins.ProjectLinker"; }
+		private string UserPreferencesRoot {
+			get { return String.Format("MonoDevelop.Addins.ProjectLinker.{0}", SolutioName); }
 		}
 
-		private void LoadUserPreferences(out string sourceProjectName, out List<string> targetProjectNames)
-		{
-			sourceProjectName = PropertyService.Get<string>(UserPreferencesSourceProject);
-			targetProjectNames = PropertyService.Get<List<string>>(UserPreferencesTargetProjects);
-		}
+		private void ExecuteFileChangedAction<T>(EventArgsChain<T> args, FileChangedActionType actionType) where T : ProjectFileEventInfo {
+			if (sourceProject == null) {
+				return;
+			}
 
-		private void ExecuteFileChangedAction<T>(EventArgsChain<T> args, FileChangedActionType actionType) where T : ProjectFileEventInfo
-		{
 			if (args is ProjectFileEventArgs) {
 				HandleFileAddedRemoved(args as ProjectFileEventArgs, actionType);
 			}
@@ -127,16 +124,14 @@ namespace ProjectLinker
 			targetProjects.ForEach(p => p.Save(null));
 		}
 
-		private void HandleFileRenamed(ProjectFileRenamedEventArgs args)
-		{
+		private void HandleFileRenamed(ProjectFileRenamedEventArgs args) {
 			foreach (var info in args) {
 				RemoveFile(new ProjectFile(info.OldName));
 				AddFile(new ProjectFile(info.NewName), info.Project);
-			}	
+			}
 		}
 
-		private void HandleFileAddedRemoved(ProjectFileEventArgs args, FileChangedActionType actionType)
-		{
+		private void HandleFileAddedRemoved(ProjectFileEventArgs args, FileChangedActionType actionType) {
 			foreach (var info in args) {
 				if (actionType == FileChangedActionType.Added) {
 					AddFile(info.ProjectFile, info.Project);
@@ -147,8 +142,7 @@ namespace ProjectLinker
 			}
 		}
 
-		private void AddFile(ProjectFile projectFile, Project project)
-		{
+		private void AddFile(ProjectFile projectFile, Project project) {
 			if (FileService.IsDirectory(projectFile.Name)) {
 				return;
 			}
@@ -167,8 +161,7 @@ namespace ProjectLinker
 			}
 		}
 
-		private void RemoveFile(ProjectFile target)
-		{
+		private void RemoveFile(ProjectFile target) {
 			foreach (var targetProject in targetProjects) {
 				ProjectFile pf = targetProject.Files.FirstOrDefault(f => f.Name == target.Name);
 
@@ -178,8 +171,6 @@ namespace ProjectLinker
 			}
 		}
 
-		protected override void Update(CommandInfo info) {
-			info.Enabled = IdeApp.ProjectOperations.CurrentSelectedProject != null;
-		}
+		private ProjectLinkerManager() {}
 	}
 }
