@@ -1,10 +1,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Gtk;
 using MonoDevelop.Ide;
-using MonoDevelop.Projects;
 
 namespace ProjectLinker
 {
@@ -32,7 +30,7 @@ namespace ProjectLinker
 				CheckButton checkButton = new CheckButton(project);
 				targetProjectsBox.PackStart(checkButton, false, false, 0);
 
-				if (savedTargetProjectNames.Contains(project)) {
+				if (savedTargetProjectNames != null && savedTargetProjectNames.Contains(project)) {
 					checkButton.Active = true;
 				}
 			}

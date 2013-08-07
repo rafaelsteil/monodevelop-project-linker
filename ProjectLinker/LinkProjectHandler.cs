@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Xml;
 using System.Xml.XPath;
 using System.Linq;
 using System.Xml.Linq;
-using GLib;
 using MonoDevelop.Components.Commands;
 using MonoDevelop.Core;
 using MonoDevelop.Ide;
@@ -22,6 +20,17 @@ namespace ProjectLinker
 		private ProjectFileRenamedEventHandler fileRenamedInProject;
 		private Project sourceProject;
 		private List<Project> targetProjects;
+		public static int a;
+
+		static LinkProjectHandler()
+		{
+			a = 0;
+		}
+
+		public LinkProjectHandler()
+		{
+			sourceProject = null;
+		}
 
 		protected override void Run()
 		{
@@ -81,48 +90,29 @@ namespace ProjectLinker
 
 		private void SaveUserPreferences()
 		{
-			var settingsPath = UserPreferencesPath;
-			XDocument doc = File.Exists(UserPreferencesPath) ? XDocument.Load(settingsPath) : XDocument.Parse("<Properties></Properties>");
-			
-			doc.Root.Descendants(UserPreferencesTagName).Remove();
-
-			if (sourceProject != null) {
-				XElement prefsElement = new XElement(UserPreferencesTagName,
-					new XElement("sourceProject", sourceProject.Name),
-					new XElement("targetProjects", (from t in targetProjects select new XElement("name", t.Name)).ToList()));
-				doc.Root.Add(prefsElement);
-			}
-
-			File.WriteAllText(settingsPath, doc.ToString(), Encoding.UTF8);
+			PropertyService.Set(UserPreferencesSourceProject, sourceProject != null ? sourceProject.Name : "");
+			PropertyService.Set(UserPreferencesTargetProjects, sourceProject != null ? (from t in targetProjects select t.Name).ToList() :null);
 		}
 
-		private static string UserPreferencesTagName
+		private string UserPreferencesTargetProjects
+		{
+			get { return String.Format("{0}.TargetProjects", UserPreferencesRoot); }
+		}
+
+		private string UserPreferencesSourceProject
+		{
+			get { return String.Format("{0}.SourceProject", UserPreferencesRoot); }
+		}
+
+		private static string UserPreferencesRoot
 		{
 			get { return "MonoDevelop.Addins.ProjectLinker"; }
 		}
 
 		private void LoadUserPreferences(out string sourceProjectName, out List<string> targetProjectNames)
 		{
-			var settingsPath = UserPreferencesPath;
-			sourceProjectName = null;
-			targetProjectNames = new List<string>();
-
-			if (!File.Exists(settingsPath)) {
-				return;
-			}
-
-			XDocument doc = XDocument.Load(settingsPath);
-			sourceProjectName = doc.XPathSelectElements(String.Format("//{0}/sourceProject", UserPreferencesTagName)).Select(x => x.Value).FirstOrDefault();
-			targetProjectNames = doc.XPathSelectElements(String.Format("//{0}/targetProjects/name", UserPreferencesTagName)).Select(x => x.Value).ToList();
-		}
-
-		private static string UserPreferencesPath
-		{
-			get
-			{
-				Solution solution = IdeApp.Workspace.GetAllSolutions().First();
-				return Path.Combine(solution.BaseDirectory, solution.Name + ".userprefs");
-			}
+			sourceProjectName = PropertyService.Get<string>(UserPreferencesSourceProject);
+			targetProjectNames = PropertyService.Get<List<string>>(UserPreferencesTargetProjects);
 		}
 
 		private void ExecuteFileChangedAction<T>(EventArgsChain<T> args, FileChangedActionType actionType) where T : ProjectFileEventInfo
