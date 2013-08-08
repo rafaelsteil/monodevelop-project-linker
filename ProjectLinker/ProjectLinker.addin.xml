@@ -4,7 +4,7 @@
 	name="Project linker"
 	author="Rafael Steil"
 	copyright="LGPL"
-	url="http://rafaelsteil.com"
+	url="http://rafaelsteil.github.io/monodevelop-project-linker"
 	description="Automatically link files from one project onto another"
 	category="Project Extensions"
 	version="1.0">
