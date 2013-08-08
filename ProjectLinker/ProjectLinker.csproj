@@ -89,7 +89,7 @@
     <Content Include="addin-project.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
+  <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
     <PostBuildEvent>copy $(TargetPath) %25LocalAppData%25\XamarinStudio-4.0\LocalInstall\Addins\ProjectLinker
 copy $(TargetDir)$(TargetName).pdb %25LocalAppData%25\XamarinStudio-4.0\LocalInstall\Addins\ProjectLinker</PostBuildEvent>
   </PropertyGroup>
