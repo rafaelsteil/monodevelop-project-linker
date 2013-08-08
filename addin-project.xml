@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<AddinProject appVersion="1.0">
+<AddinProject appVersion="4.0">
 	<Project platforms="Win32 Mac Linux">
 		<AddinFile>ProjectLinker/bin/Debug/ProjectLinker.dll</AddinFile>
 		<BuildFile>ProjectLinker.sln</BuildFile>
