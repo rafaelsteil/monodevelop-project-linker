@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Project Linker for MonoDevelop / Xamarin Studio by rafaelsteil</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Project Linker for MonoDevelop / Xamarin Studio</h1>
+        <h2>Project Linker for Mono Develop / Xamarin Studio</h2>
+        <a href="https://github.com/rafaelsteil/monodevelop-project-linker" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2>
+<a name="project-linker-for-monodevelop--xamarin-studio" class="anchor" href="#project-linker-for-monodevelop--xamarin-studio"><span class="octicon octicon-link"></span></a>Project Linker for MonoDevelop / Xamarin Studio</h2>
+
+<p>This addin was developed in order to automatically create and maintain links from a source project to a set of target projects, in order to make code sharing between different plataforms a more friendly task. It is based on the <a href="http://visualstudiogallery.msdn.microsoft.com/273dbf44-55a1-4ac6-a1f3-0b9741587b9a">Visual Studio Project Linker</a> extension. </p>
+
+<p>The main reason behind the development of this addin was that I was working on a project that targets multiple plataforms, including iOS, Android, Windows, Mac and Linux, and PCL support was very lacky on Xamarin Studio, and even on Visual Studio 2012 it had its problems. Also, PCL programming imposes some restrictions that I found harder to workaround than using a third party plugin to do the file linking between the projects. </p>
+
+<p>The inner workings of this approach are also described in Xamarin's document <a href="http://docs.xamarin.com/guides/cross-platform/application_fundamentals/building_cross_platform_applications/sharing_code_options">Sharing Code Options</a>, item " <em>2. File Linking to Separate Projects</em> ", and also applies to item " <em>3. Clone Project Files</em> ", which I personally prefer. </p>
+
+<h3>
+<a name="benefits" class="anchor" href="#benefits"><span class="octicon octicon-link"></span></a>Benefits</h3>
+
+<blockquote>
+<p><strong>Disclaimer</strong>: The following information was copied from Xamarin's <a href="http://docs.xamarin.com/guides/cross-platform/application_fundamentals/building_cross_platform_applications/sharing_code_options">Sharing Code Options</a> document. </p>
+</blockquote>
+
+<ul>
+<li>Allows you to share code across multiple projects.</li>
+<li>Platform-specific projects can each have different compiler directives defined, so you can branch code based on the platform (eg. using <code>#if __ANDROID__</code> or <code>#if __IOS__</code>).</li>
+<li>Platform-specific projects can include platform-specific references. The code using these references can be managed with compiler directives.</li>
+</ul><h3>
+<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to use</h3>
+
+<p>After the addin is instaled, open any solution with more than one project, and select the menu <code>Project -&gt; Configure project link...</code>, and select the source and target projects. Then, when any add, remove or rename operation is performed on the source project, it will be automatically replicated to all target projects. </p>
+
+<p>To stop the linking projects just open the configuration dialog again and select the option <code>Do not link any projects</code></p>
+
+<h3>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<blockquote>
+<p><strong>Disclaimer</strong>: The following information was copied from Xamarin's <a href="http://docs.xamarin.com/guides/cross-platform/application_fundamentals/building_cross_platform_applications/sharing_code_options">Sharing Code Options</a> document. </p>
+</blockquote>
+
+<p>The project structure usually look like this: </p>
+
+<p><img src="http://docs.xamarin.com/static/guides/cross-platform/application_fundamentals/building_cross_platform_applications/sharing_code_options/Images/image9.png" alt="Project structure"></p>
+
+<p>Note that the linked projects are the <code>Linked</code> prefix, which is not mandatory but helps to identify them on the solution. The conceptual architecture is shown in this diagram:</p>
+
+<p><img src="http://docs.xamarin.com/static/guides/cross-platform/application_fundamentals/building_cross_platform_applications/sharing_code_options/Images/LinkedFiles.png" alt="Conceptual architecture"></p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/rafaelsteil/monodevelop-project-linker/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/rafaelsteil/monodevelop-project-linker/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/rafaelsteil/monodevelop-project-linker"></a> is maintained by <a href="https://github.com/rafaelsteil">rafaelsteil</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
