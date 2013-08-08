@@ -27,6 +27,16 @@ namespace ProjectLinker
 			sourceProject = null;
 		}
 
+		public void OnSync() {
+			if (sourceProject == null) {
+				return;
+			}
+
+			SyncRemovedFiles();
+			SyncAddedFiles();
+			SaveTargetProjects();
+		}
+
 		public List<string> SavedTargetProjectNames {
 			get { return PropertyService.Get<List<string>>(UserPreferencesTargetProjects); }
 		}
@@ -121,6 +131,11 @@ namespace ProjectLinker
 				HandleFileRenamed(args as ProjectFileRenamedEventArgs);
 			}
 
+			SaveTargetProjects();
+		}
+
+		private void SaveTargetProjects()
+		{
 			targetProjects.ForEach(p => p.Save(null));
 		}
 
@@ -142,7 +157,7 @@ namespace ProjectLinker
 			}
 		}
 
-		private void AddFile(ProjectFile projectFile, Project project) {
+		private void AddFile(ProjectFile projectFile, Project fromSourceProject) {
 			if (FileService.IsDirectory(projectFile.Name)) {
 				return;
 			}
@@ -150,10 +165,18 @@ namespace ProjectLinker
 			foreach (var targetProject in targetProjects) {
 				string targetProjectBaseDir = targetProject.BaseDirectory.ToString();
 				string filename = projectFile.FilePath.ToString();
-				string linkPath = filename.Substring(project.BaseDirectory.ToString().Length + 1);
+				string linkPath = filename.Substring(fromSourceProject.BaseDirectory.ToString().Length + 1);
 
-				string classDir = linkPath.Substring(0, linkPath.LastIndexOf(Path.DirectorySeparatorChar));
-				FileService.EnsureDirectoryExists(Path.Combine(targetProjectBaseDir, classDir));
+				if (targetProject.Files.GetFileWithVirtualPath(linkPath) != null) {
+					continue;
+				}
+
+				int lastIndexOf = linkPath.LastIndexOf(Path.DirectorySeparatorChar);
+
+				if (lastIndexOf > -1) {
+					string classDir = linkPath.Substring(0, lastIndexOf);
+					FileService.EnsureDirectoryExists(Path.Combine(targetProjectBaseDir, classDir));
+				}
 
 				ProjectFile pf = new ProjectFile(filename);
 				pf.Link = linkPath;
@@ -167,6 +190,22 @@ namespace ProjectLinker
 
 				if (pf != null) {
 					targetProject.Files.Remove(pf);
+				}
+			}
+		}
+
+		private void SyncAddedFiles() {
+			foreach (var pf in sourceProject.Files) {
+				AddFile(pf, sourceProject);
+			}
+		}
+
+		private void SyncRemovedFiles() {
+			foreach (var project in targetProjects) {
+				var inexistedFiles = (from pf in project.Files where pf.IsLink where !File.Exists(pf.FilePath) select pf).ToList();
+
+				foreach (var pf in inexistedFiles) {
+					project.Files.Remove(pf);
 				}
 			}
 		}

@@ -9,7 +9,8 @@ namespace ProjectLinker
 		protected override void Run()
 		{
 			ProjectLinkerManager manager = ProjectLinkerManager.Manager;
-			new SettingsDialog (manager.OnSettingsSave, manager.SavedSourceProjectName, manager.SavedTargetProjectNames);
+			new SettingsDialog (manager.OnSettingsSave, manager.OnSync,
+				manager.SavedSourceProjectName, manager.SavedTargetProjectNames);
 		}
 
 		protected override void Update(CommandInfo info) {

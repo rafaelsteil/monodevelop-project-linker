@@ -11,6 +11,8 @@ namespace ProjectLinker
 		private global::Gtk.Label label2;
 		private global::Gtk.Alignment alignment2;
 		private global::Gtk.VBox targetProjectsBox;
+		private global::Gtk.HSeparator hseparator2;
+		private global::Gtk.Button buttonSync;
 		private global::Gtk.Button buttonCancel;
 		private global::Gtk.Button buttonSave;
 
@@ -86,12 +88,44 @@ namespace ProjectLinker
 			w1.Add (this.vbox2);
 			global::Gtk.Box.BoxChild w8 = ((global::Gtk.Box.BoxChild)(w1 [this.vbox2]));
 			w8.Position = 0;
+			// Container child dialog1_VBox.Gtk.Box+BoxChild
+			this.hseparator2 = new global::Gtk.HSeparator ();
+			this.hseparator2.Name = "hseparator2";
+			w1.Add (this.hseparator2);
+			global::Gtk.Box.BoxChild w9 = ((global::Gtk.Box.BoxChild)(w1 [this.hseparator2]));
+			w9.Position = 1;
+			w9.Expand = false;
+			w9.Fill = false;
 			// Internal child ProjectLinker.SettingsDialog.ActionArea
-			global::Gtk.HButtonBox w9 = this.ActionArea;
-			w9.Name = "dialog1_ActionArea";
-			w9.Spacing = 10;
-			w9.BorderWidth = ((uint)(5));
-			w9.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
+			global::Gtk.HButtonBox w10 = this.ActionArea;
+			w10.Name = "dialog1_ActionArea";
+			w10.Spacing = 10;
+			w10.BorderWidth = ((uint)(5));
+			w10.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
+			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
+			this.buttonSync = new global::Gtk.Button ();
+			this.buttonSync.TooltipMarkup = "Synchronize all changes from the source to the target projects";
+			this.buttonSync.CanFocus = true;
+			this.buttonSync.Name = "buttonSync";
+			// Container child buttonSync.Gtk.Container+ContainerChild
+			global::Gtk.Alignment w11 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
+			// Container child GtkAlignment.Gtk.Container+ContainerChild
+			global::Gtk.HBox w12 = new global::Gtk.HBox ();
+			w12.Spacing = 2;
+			// Container child GtkHBox.Gtk.Container+ContainerChild
+			global::Gtk.Image w13 = new global::Gtk.Image ();
+			w13.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-refresh", global::Gtk.IconSize.Menu);
+			w12.Add (w13);
+			// Container child GtkHBox.Gtk.Container+ContainerChild
+			global::Gtk.Label w15 = new global::Gtk.Label ();
+			w15.LabelProp = "Sync";
+			w12.Add (w15);
+			w11.Add (w12);
+			this.buttonSync.Add (w11);
+			this.AddActionWidget (this.buttonSync, 0);
+			global::Gtk.ButtonBox.ButtonBoxChild w19 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w10 [this.buttonSync]));
+			w19.Expand = false;
+			w19.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonCancel = new global::Gtk.Button ();
 			this.buttonCancel.CanDefault = true;
@@ -99,51 +133,52 @@ namespace ProjectLinker
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.UseUnderline = true;
 			// Container child buttonCancel.Gtk.Container+ContainerChild
-			global::Gtk.Alignment w10 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
+			global::Gtk.Alignment w20 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
 			// Container child GtkAlignment.Gtk.Container+ContainerChild
-			global::Gtk.HBox w11 = new global::Gtk.HBox ();
-			w11.Spacing = 2;
+			global::Gtk.HBox w21 = new global::Gtk.HBox ();
+			w21.Spacing = 2;
 			// Container child GtkHBox.Gtk.Container+ContainerChild
-			global::Gtk.Image w12 = new global::Gtk.Image ();
-			w12.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-cancel", global::Gtk.IconSize.Menu);
-			w11.Add (w12);
+			global::Gtk.Image w22 = new global::Gtk.Image ();
+			w22.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-cancel", global::Gtk.IconSize.Menu);
+			w21.Add (w22);
 			// Container child GtkHBox.Gtk.Container+ContainerChild
-			global::Gtk.Label w14 = new global::Gtk.Label ();
-			w14.LabelProp = "_Cancel";
-			w14.UseUnderline = true;
-			w11.Add (w14);
-			w10.Add (w11);
-			this.buttonCancel.Add (w10);
+			global::Gtk.Label w24 = new global::Gtk.Label ();
+			w24.LabelProp = "_Cancel";
+			w24.UseUnderline = true;
+			w21.Add (w24);
+			w20.Add (w21);
+			this.buttonCancel.Add (w20);
 			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w18 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w9 [this.buttonCancel]));
-			w18.Expand = false;
-			w18.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w28 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w10 [this.buttonCancel]));
+			w28.Position = 1;
+			w28.Expand = false;
+			w28.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonSave = new global::Gtk.Button ();
 			this.buttonSave.CanFocus = true;
 			this.buttonSave.Name = "buttonSave";
 			this.buttonSave.UseUnderline = true;
 			// Container child buttonSave.Gtk.Container+ContainerChild
-			global::Gtk.Alignment w19 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
+			global::Gtk.Alignment w29 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
 			// Container child GtkAlignment.Gtk.Container+ContainerChild
-			global::Gtk.HBox w20 = new global::Gtk.HBox ();
-			w20.Spacing = 2;
+			global::Gtk.HBox w30 = new global::Gtk.HBox ();
+			w30.Spacing = 2;
 			// Container child GtkHBox.Gtk.Container+ContainerChild
-			global::Gtk.Image w21 = new global::Gtk.Image ();
-			w21.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-apply", global::Gtk.IconSize.Menu);
-			w20.Add (w21);
+			global::Gtk.Image w31 = new global::Gtk.Image ();
+			w31.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-apply", global::Gtk.IconSize.Menu);
+			w30.Add (w31);
 			// Container child GtkHBox.Gtk.Container+ContainerChild
-			global::Gtk.Label w23 = new global::Gtk.Label ();
-			w23.LabelProp = "Save";
-			w23.UseUnderline = true;
-			w20.Add (w23);
-			w19.Add (w20);
-			this.buttonSave.Add (w19);
+			global::Gtk.Label w33 = new global::Gtk.Label ();
+			w33.LabelProp = "Save";
+			w33.UseUnderline = true;
+			w30.Add (w33);
+			w29.Add (w30);
+			this.buttonSave.Add (w29);
 			this.AddActionWidget (this.buttonSave, 0);
-			global::Gtk.ButtonBox.ButtonBoxChild w27 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w9 [this.buttonSave]));
-			w27.Position = 1;
-			w27.Expand = false;
-			w27.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w37 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w10 [this.buttonSave]));
+			w37.Position = 2;
+			w37.Expand = false;
+			w37.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
@@ -151,6 +186,7 @@ namespace ProjectLinker
 			this.DefaultHeight = 252;
 			this.Show ();
 			this.projectsCombo.Changed += new global::System.EventHandler (this.sourceProjectChanged);
+			this.buttonSync.Clicked += new global::System.EventHandler (this.syncButtonClicked);
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.cancelButtonClicked);
 			this.buttonSave.Clicked += new global::System.EventHandler (this.saveButtonClicked);
 		}

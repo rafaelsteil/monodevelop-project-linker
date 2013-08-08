@@ -2,24 +2,30 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Gtk;
+using MonoDevelop.Components.Extensions;
 using MonoDevelop.Ide;
+using Action = System.Action;
 
 namespace ProjectLinker
 {
 	public partial class SettingsDialog : Dialog
 	{
 		private readonly Action<string, List<string>> onSettingsSave;
+		private readonly Action onSync;
 		private readonly string savedSourceProjectName;
 		private readonly List<string> savedTargetProjectNames;
 
-		public SettingsDialog (Action<string, List<string>> onSettingsSave, string savedSourceProjectName, List<string> savedTargetProjectNames)
+		public SettingsDialog (Action<string, List<string>> onSettingsSave, System.Action onSync,
+			string savedSourceProjectName, List<string> savedTargetProjectNames)
 		{
 			this.onSettingsSave = onSettingsSave;
+			this.onSync = onSync;
 			this.savedSourceProjectName = savedSourceProjectName;
 			this.savedTargetProjectNames = savedTargetProjectNames;
 			Build ();
 			FillTargetProjects();
 			FillSourceProjectCombo();
+			buttonSync.Sensitive = projectsCombo.Active > 0;
 		}
 
 		private void FillTargetProjects()
@@ -91,6 +97,23 @@ namespace ProjectLinker
 				if (!check.Sensitive || !targetProjectsBox.Sensitive) {
 					check.Active = false;
 				}
+			}
+		}
+
+		protected void syncButtonClicked (object sender, EventArgs e)
+		{
+			string message = "This will sync all files from the source project that don't " 
+				+ "exist on the targets, as well remove the inexistent references. Continue?";
+			MessageDialog messageDialog = new MessageDialog(this, DialogFlags.DestroyWithParent, MessageType.Question, ButtonsType.YesNo, message);
+
+			ResponseType response = (ResponseType)messageDialog.Run();
+
+			if (response == ResponseType.Yes) {
+				onSync();
+				Destroy();
+			}
+			else {
+				messageDialog.Destroy();
 			}
 		}
 	}
