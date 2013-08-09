@@ -109,6 +109,8 @@ header h2 {
   max-width: 100%;
 }
 
+img.shadow { box-shadow: 2px 2px 15px #888888; }
+
 aside#sidebar {
   width: 200px;
   padding-left: 20px;
