@@ -202,7 +202,7 @@ namespace ProjectLinker
 
 		private void SyncRemovedFiles() {
 			foreach (var project in targetProjects) {
-				var inexistedFiles = (from pf in project.Files where pf.IsLink && !File.Exists(pf.FilePath) select pf).ToList();
+				var inexistedFiles = (from pf in project.Files where !File.Exists(pf.FilePath) select pf).ToList();
 
 				foreach (var pf in inexistedFiles) {
 					project.Files.Remove(pf);
