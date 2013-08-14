@@ -7,7 +7,17 @@
 	url="http://rafaelsteil.github.io/monodevelop-project-linker"
 	description="Automatically link files from one project onto another"
 	category="Project Extensions"
-	version="1.0">
+	version="1.1">
+
+	<Header>
+		<UpdateRank>Normal</UpdateRank>
+		<ReleaseNotes>
+			{{1.1, 2013-08-14}}
+			Fixed two issues:
+			- Sync now correctly removes all inexistent files
+			- Fixed an issue where Visual Studio would not recognize the project items if the target project was in the same directory structure of the source project
+		</ReleaseNotes>
+	</Header>
 
 	<Runtime>
 		<Import assembly="ProjectLinker.dll"/>
