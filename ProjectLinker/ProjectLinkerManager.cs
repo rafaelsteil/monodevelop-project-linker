@@ -167,7 +167,7 @@ namespace ProjectLinker
 				string filename = projectFile.FilePath.ToString();
 				string linkPath = filename.Substring(fromSourceProject.BaseDirectory.ToString().Length + 1);
 
-				if (targetProject.Files.GetFileWithVirtualPath(linkPath) != null) {
+				if (IgnoreExistingFile(targetProject, linkPath)) {
 					continue;
 				}
 
@@ -179,9 +179,18 @@ namespace ProjectLinker
 				}
 
 				ProjectFile pf = new ProjectFile(filename);
-				pf.Link = linkPath;
+
+				if (targetProject.BaseDirectory != fromSourceProject.BaseDirectory) {
+					pf.Link = linkPath;
+				}
+
 				targetProject.AddFile(pf);
 			}
+		}
+
+		private bool IgnoreExistingFile(Project targetProject, string linkPath)
+		{
+			return targetProject.Files.GetFileWithVirtualPath(linkPath) != null;
 		}
 
 		private void RemoveFile(ProjectFile target) {
