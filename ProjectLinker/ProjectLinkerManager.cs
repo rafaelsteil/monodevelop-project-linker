@@ -165,7 +165,7 @@ namespace ProjectLinker
 			foreach (var targetProject in targetProjects) {
 				string targetProjectBaseDir = targetProject.BaseDirectory.ToString();
 				string filename = projectFile.FilePath.ToString();
-				string linkPath = filename.Substring(fromSourceProject.BaseDirectory.ToString().Length + 1);
+				string linkPath = projectFile.ProjectVirtualPath;
 
 				if (IgnoreExistingFile(targetProject, linkPath)) {
 					continue;
@@ -182,6 +182,7 @@ namespace ProjectLinker
 
 				if (targetProject.BaseDirectory != fromSourceProject.BaseDirectory) {
 					pf.Link = linkPath;
+					pf.BuildAction = projectFile.BuildAction;
 				}
 
 				targetProject.AddFile(pf);
