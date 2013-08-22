@@ -5,11 +5,11 @@
     <target-gtk-version>2.12</target-gtk-version>
   </configuration>
   <import>
-    <widget-library name="../../../../Program Files (x86)/Xamarin Studio/bin/Mono.TextEditor.dll" />
-    <widget-library name="../../../../Program Files (x86)/Xamarin Studio/bin/MonoDevelop.Ide.dll" />
+    <widget-library name="../lib/Mono.TextEditor.dll" />
+    <widget-library name="../lib/MonoDevelop.Ide.dll" />
     <widget-library name="../bin/Debug/ProjectLinker.dll" internal="true" />
   </import>
-  <widget class="Gtk.Dialog" id="ProjectLinker.SettingsDialog" design-size="400 252">
+  <widget class="Gtk.Dialog" id="ProjectLinker.SettingsDialog" design-size="400 266">
     <property name="MemberName" />
     <property name="Title" translatable="yes">Project linker options</property>
     <property name="WindowPosition">CenterOnParent</property>
@@ -84,11 +84,23 @@
                 <property name="Yalign">0</property>
                 <property name="LeftPadding">20</property>
                 <child>
-                  <widget class="Gtk.VBox" id="targetProjectsBox">
+                  <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow">
                     <property name="MemberName" />
-                    <property name="Spacing">6</property>
                     <child>
-                      <placeholder />
+                      <widget class="Gtk.Viewport" id="GtkViewport">
+                        <property name="MemberName" />
+                        <property name="ShadowType">None</property>
+                        <child>
+                          <widget class="Gtk.VBox" id="targetProjectsBox">
+                            <property name="MemberName" />
+                            <property name="ShowScrollbars">True</property>
+                            <property name="Spacing">6</property>
+                            <child>
+                              <placeholder />
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
                     </child>
                   </widget>
                 </child>
