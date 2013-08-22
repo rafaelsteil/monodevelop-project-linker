@@ -81,7 +81,7 @@ namespace ProjectLinker
 			if (sourceProject != null) {
 				fileAddedToProject = (sender, args) => ExecuteFileChangedAction(args, FileChangedActionType.Added);
 				fileRemovedFromProject = (sender, args) => ExecuteFileChangedAction(args, FileChangedActionType.Removed);
-				fileRenamedInProject = (sender, args) => ExecuteFileChangedAction(args, FileChangedActionType.Renamed);
+				fileRenamedInProject = (sender, args) => ExecuteFileRenamedAction(args);
 
 				sourceProject.FileAddedToProject += fileAddedToProject;
 				sourceProject.FileRemovedFromProject += fileRemovedFromProject;
@@ -119,17 +119,24 @@ namespace ProjectLinker
 			get { return String.Format("MonoDevelop.Addins.ProjectLinker.{0}", SolutioName); }
 		}
 
-		private void ExecuteFileChangedAction<T>(EventArgsChain<T> args, FileChangedActionType actionType) where T : ProjectFileEventInfo {
+		private void ExecuteFileChangedAction(ProjectFileEventArgs args, FileChangedActionType actionType) {
 			if (sourceProject == null) {
 				return;
 			}
 
-			if (args is ProjectFileEventArgs) {
-				HandleFileAddedRemoved(args as ProjectFileEventArgs, actionType);
+			if (actionType == FileChangedActionType.Added || actionType == FileChangedActionType.Removed) {
+				HandleFileAddedRemoved(args, actionType);
 			}
-			else if (args is ProjectFileRenamedEventArgs) {
-				HandleFileRenamed(args as ProjectFileRenamedEventArgs);
+
+			SaveTargetProjects();
+		}
+
+		private void ExecuteFileRenamedAction(ProjectFileRenamedEventArgs args) {
+			if (sourceProject == null) {
+				return;
 			}
+
+			HandleFileRenamed(args);
 
 			SaveTargetProjects();
 		}
@@ -165,7 +172,7 @@ namespace ProjectLinker
 			foreach (var targetProject in targetProjects) {
 				string targetProjectBaseDir = targetProject.BaseDirectory.ToString();
 				string filename = projectFile.FilePath.ToString();
-				string linkPath = filename.Substring(fromSourceProject.BaseDirectory.ToString().Length + 1);
+				string linkPath = projectFile.ProjectVirtualPath;
 
 				if (IgnoreExistingFile(targetProject, linkPath)) {
 					continue;
@@ -182,6 +189,7 @@ namespace ProjectLinker
 
 				if (targetProject.BaseDirectory != fromSourceProject.BaseDirectory) {
 					pf.Link = linkPath;
+					pf.BuildAction = projectFile.BuildAction;
 				}
 
 				targetProject.AddFile(pf);
