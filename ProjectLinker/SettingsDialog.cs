@@ -71,14 +71,19 @@ namespace ProjectLinker
 
 		protected void saveButtonClicked (object sender, EventArgs e)
 		{
+			FireSaveCallback();
+			Destroy();
+		}
+
+		private void FireSaveCallback()
+		{
 			string sourceProject = projectsCombo.Active == 0 ? null : projectsCombo.ActiveText;
 			List<string> targetProjects = (from widget in targetProjectsBox.Children
-								  let check = (widget as CheckButton)
-								  where check != null && check.Active
-								  select check.Label).ToList();
+			                               let check = (widget as CheckButton)
+			                               where check != null && check.Active
+			                               select check.Label).ToList();
 
 			onSettingsSave(sourceProject, targetProjects);
-			Destroy();
 		}
 
 		protected void sourceProjectChanged (object sender, EventArgs e)
@@ -109,6 +114,7 @@ namespace ProjectLinker
 			ResponseType response = (ResponseType)messageDialog.Run();
 
 			if (response == ResponseType.Yes) {
+				FireSaveCallback();
 				onSync();
 				Destroy();
 			}
